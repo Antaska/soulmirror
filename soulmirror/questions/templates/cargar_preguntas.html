@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cargar Preguntas</title>
+    </head>
+    <body>
+        <h1>Cargar preguntas desde Archivo</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="archivo_preguntas">Seleccionar archivo:</label>
+            <input type="file" name="archivo_preguntas" id="archivo_preguntas" accept=".md,.txt,*">
+            <button type="submit">Cargar</button>
+        </form>
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </body>
+</html>
