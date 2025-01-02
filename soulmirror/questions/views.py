@@ -57,8 +57,24 @@ def pregunta_diaria(request):
 
     if preguntas_disponibles.exists():
         pregunta = random.choice(preguntas_disponibles)
-        pregunta.respondida_date = now()
-        pregunta.save()
+        Question.objects.filter(id=pregunta.id).update(respondida=now())
+        pregunta.refresh_from_db()
         return render(request, "pregunta_diaria.html",{"pregunta":pregunta})
     else:
         return render(request, "no_preguntas.html")
+    
+def estado_general(request):
+    tematica_filtro = request.GET.get("tematica", None)
+    estado_filtro = request.GET.get("estado", None)
+
+    preguntas = Question.objects.all()
+
+    if tematica_filtro:
+        preguntas = preguntas.filter(tematica__icontains=tematica_filtro)
+    
+    if estado_filtro == "respondida":
+        preguntas = preguntas.filter(respondida__isnull=False)
+    elif estado_filtro == "no_respondida":
+        preguntas = preguntas.filter(responida__isnull=True)
+
+    return render(request, "estado_general.html", {"preguntas":preguntas})

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Estado General de Preguntas</title>
+    </head>
+    <body>
+        <h1>Estado general de Preguntas</h1>
+        <form method="get">
+            <label for="tematica">Filtrar por temática:</label>
+            <input type="text" name="tematica" id="tematica" value="{{request.GET.tematica}}">
+
+            <label for="estado">Filtrar por estado:</label>
+            <select name="estado" id="estado">
+                <option value="">Todos</option>
+                <option value="respondida" {% if request.GET.estado == "respondida" %}selected{% endif %}>Respondida</option>
+                <option value="respondida" {% if request.GET.estado == "no_respondida" %}selected{% endif %}>No Respondida</option>
+            </select>
+
+            <button type="submit">Filtrar</button>
+        </form>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Temática</th>
+                    <th>Pregunta</th>
+                    <th>Estado</th>
+                    <th>Fecha de Respuesta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pregunta in preguntas %}
+                <tr>
+                    <td>{{pregunta.id}}</td>
+                    <td>{{pregunta.tematica}}</td>
+                    <td>{{pregunta.pregunta}}</td>
+                    {% if pregunta.respondida %}
+                    <td>Respondida</td>
+                    <td>{{pregunta.respondida|date:"Y-m-d H:i:s"}}</td>
+                    {% else %}
+                    <td>No respondida</td>
+                    <td>-</td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5"> No hay preguntas que coincidan con los filtros</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
