@@ -1,0 +1,30 @@
+services:
+  web:
+    image: antaska/soulmirror:latest
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SECRET_KEY: "super-secret-key"
+      DJANGO_DEBUG: "False"
+      DATABASE_ENGINE: "django.db.backends.postgresql"
+      DATABASE_NAME: "django"
+      DATABASE_USER: "django"
+      DATABASE_PASSWORD: "django"
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "5432"
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: django
+      POSTGRES_DB: django
+#    ports:
+#      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
